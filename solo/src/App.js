@@ -75,7 +75,7 @@ const App = () => {
       <TodoList
         todos={todos}
         onCheckToggle={onCheckToggle}
-        onInsertToggle={insertToggle}
+        onInsertToggle={onInsertToggle}
         onChangeSelectedTodo={onChangeSelectedTodo}
         onRemove={onRemove}
       />

@@ -14,7 +14,7 @@ const TodoList = ({
         {todos.map(todo => 
             (<TodoItem 
                 todo={todo} 
-                key={todo.id} 
+                key={todo.id}
                 onCheckToggle={onCheckToggle} 
                 onInsertToggle={onInsertToggle}
                 onChangeSelectedTodo={onChangeSelectedTodo}

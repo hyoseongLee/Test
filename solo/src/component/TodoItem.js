@@ -25,8 +25,8 @@ const TodoItem = ({
                 />)}
                 <div className="text"
                     onClick={() => {
-                        onChangeSelectedTodo(todo);
                         onInsertToggle();
+                        onChangeSelectedTodo(todo);
                     }}>
                     {text}
                 </div>
