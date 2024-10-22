@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
-import './App.css';
+import React, { useState } from 'react';
 import TodoLayout from './component/TodoLayout';
 import TodoList from './component/TodoList';
-import { MdAddCircle } from 'react-icons/md';
+import { MdAddCircle, MdCircle } from 'react-icons/md';
+import './App.css';
 import TodoInsert from './component/TodoInsert';
 
 let nextid = 4;
-
 const App = () => {
+  const [selectedTodo,setSelectedTodo] = useState(null);
+  const [insertToggle, setInsertToggle] = useState(false);
 
-  const [selectedTodo, setSelectedTodo] = useState(null)
-  const [insertToggle, setInsertToggle] = useState(false)
   const [todos, setTodos] = useState([
     {
       id: 1,
@@ -20,76 +19,62 @@ const App = () => {
     {
       id: 2,
       text: "할일 2",
-      checked: false
+      checked: true
     },
     {
       id: 3,
       text: "할일 3",
       checked: true
-    }
-  ]);
+    },
+  ])
 
   const onInsertToggle = () => {
-    if (selectedTodo) {
-      setSelectedTodo(null);
-    }
-    setInsertToggle(prev => !prev);
-  };
+    setInsertToggle(prev => !prev)
+  }
 
   const onInsertTodo = text => {
     if (text === "") {
-      return alert("할일을 입력해주세요.")
-    } else {
+      return alert("할 일을 입력해 주세요.");
+    }else {
       const todo = {
         id: nextid,
         text,
-        checked: false
-      }
+        checked:false
+      };
       setTodos(todos => todos.concat(todo));
       nextid++;
     }
   };
 
-  const onCheckToggle = (id) => {
-    setTodos(todos => todos.map(todo => (todo.id === id ? { ...todo, checked: !todo.checked } : todo
+  const onChangeSelectedTodo = (todo) => {
+    setSelectedTodo(todo)
 
+  }
+
+  const onCheckToggle = (id) => {
+    setTodos(todos => todos.map(todo => (
+      todo.id === id ? 
+      {...todo, checked: !todo.checked} : todo
     )))
   }
 
-  const onChangeSelectedTodo = (todo) => {
-    setSelectedTodo(todo)
-  };
-
-  const onRemove = id => {
-    onInsertToggle()
-    setTodos(todos => todos.filter(todo=> todo.id !== id)) 
-  }
-
-  const onUpdate = (id,text) => {
-    onInsertToggle();
-    setTodos(todos => todos.map(todo => todo.id === id ? {...todo, text} : todo))
-  }
-
   return (
-    <TodoLayout todoLangth={todos.length}>
-      <TodoList
-        todos={todos}
-        onCheckToggle={onCheckToggle}
-        onInsertToggle={onInsertToggle}
-        onChangeSelectedTodo={onChangeSelectedTodo}
-        onRemove={onRemove}
-      />
+    <TodoLayout todoLength={todos.length}>
+      <TodoList 
+      todos={todos} 
+      onCheckToggle={onCheckToggle} 
+      onInsertToggle={onInsertToggle} />
 
-      <div className="app-todo-button" onClick={onInsertToggle}>
-        <MdAddCircle />
-      </div>
-      {insertToggle && <TodoInsert
-        onInsertToggle={onInsertToggle}
-        onInsertTodo={onInsertTodo}
-        selectedTodo={selectedTodo}
-        onUpdate={onUpdate} 
-        />}
+      <div className='add-plus-button' onClick={onInsertToggle}> <MdAddCircle /> </div>
+      {insertToggle && 
+      <TodoInsert 
+      selectedTodo={selectedTodo}
+      onInsertToggle={onInsertToggle} 
+      onInsertTodo={onInsertTodo} />}
     </TodoLayout>
-  );
-};
+  )
+}
+
+
+
 export default App;

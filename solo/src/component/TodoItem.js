@@ -1,39 +1,39 @@
 import React from 'react';
-import { MdCheckBoxOutlineBlank, MdCheckBox } from 'react-icons/md';
-import './TodoItem.css';
+import { MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
+import './TodoItem.css'
 
-const TodoItem = ({
-    todo,
-    onCheckToggle,
-    onInsertToggle,
-    onChangeSelectedTodo
-}) => {
+
+const TodoItem = ({ todo, onCheckToggle, onInsertToggle, onChangeSelectedTodo }) => {
     const { id, text, checked } = todo;
+
+
     return (
-        <div className="TodoItem">
-            <div className={`content ${checked ? `checked` : ""}`}>
-                {checked ? (
-                    <MdCheckBox
-                        onClick={() => {
-                            onCheckToggle(id);
-                        }}
-                    />
-                ) : (<MdCheckBoxOutlineBlank
+        <div className='TodoItem'>
+            <div className={`content ${checked ? 'checked' : ''}`}>
+                {checked ? (<MdCheckBox
                     onClick={() => {
                         onCheckToggle(id);
                     }}
-                />)}
-                <div className="text"
-                    onClick={() => {
-                        onInsertToggle();
-                        onChangeSelectedTodo(todo);
-                    }}>
-                    {text}
-                </div>
+                />
+                ) : (
+                        <MdCheckBoxOutlineBlank
+                            onClick={() => {
+                                onCheckToggle(id);
+                            }} 
+                            />
+                    )}
             </div>
+            <div className='text' onClick={() => {
+                onChangeSelectedTodo(todo);
+                onInsertToggle();
+            }}
+            >
+                {text} </div>
         </div>
     )
-};
+}
+
+
 
 
 export default TodoItem;
