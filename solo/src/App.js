@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import TodoLayout from './component/TodoLayout';
 import TodoList from './component/TodoList';
-import { MdAddCircle, MdCircle } from 'react-icons/md';
+import { MdAddCircle } from 'react-icons/md';
 import './App.css';
 import TodoInsert from './component/TodoInsert';
 
 let nextid = 4;
 const App = () => {
-  const [selectedTodo,setSelectedTodo] = useState(null);
+  const [selectedTodo, setSelectedTodo] = useState(null);
   const [insertToggle, setInsertToggle] = useState(false);
 
   const [todos, setTodos] = useState([
@@ -35,42 +35,60 @@ const App = () => {
   const onInsertTodo = text => {
     if (text === "") {
       return alert("할 일을 입력해 주세요.");
-    }else {
+    } else {
       const todo = {
         id: nextid,
         text,
-        checked:false
+        checked: false
       };
       setTodos(todos => todos.concat(todo));
       nextid++;
     }
   };
 
-  const onChangeSelectedTodo = (todo) => {
+  const onChangeSelectedTodo = todo => {
     setSelectedTodo(todo)
 
   }
 
-  const onCheckToggle = (id) => {
+  const onCheckToggle = id => {
     setTodos(todos => todos.map(todo => (
-      todo.id === id ? 
-      {...todo, checked: !todo.checked} : todo
+      todo.id === id ?
+        { ...todo, checked: !todo.checked } : todo
     )))
   }
 
+
+  const onRemove = id => {
+    onInsertToggle();
+    setTodos(todos => todos.filter(todo => todo.id !== id));
+  };
+
+  const onUpdate = (id, text) => {
+    onInsertToggle();
+    setTodos(todos =>
+      todos.map(todo => (todo.id === id ? { ...todo, text } : todo))
+    );
+  };
+
   return (
     <TodoLayout todoLength={todos.length}>
-      <TodoList 
-      todos={todos} 
-      onCheckToggle={onCheckToggle} 
-      onInsertToggle={onInsertToggle} />
+      <TodoList
+        todos={todos}
+        onCheckToggle={onCheckToggle}
+        onInsertToggle={onInsertToggle}
+        onChangeSelectedTodo={onChangeSelectedTodo}
+      />
 
       <div className='add-plus-button' onClick={onInsertToggle}> <MdAddCircle /> </div>
-      {insertToggle && 
-      <TodoInsert 
-      selectedTodo={selectedTodo}
-      onInsertToggle={onInsertToggle} 
-      onInsertTodo={onInsertTodo} />}
+      {insertToggle &&
+        <TodoInsert
+          selectedTodo={selectedTodo}
+          onInsertToggle={onInsertToggle}
+          onInsertTodo={onInsertTodo}
+          onRemove={onRemove}
+          onUpdate={onUpdate}
+        />}
     </TodoLayout>
   )
 }
