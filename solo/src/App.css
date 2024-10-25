@@ -1,11 +1,11 @@
-.add-plus-button {
+.app-plus-button {
   position: fixed;
   right: -5px;
   bottom: 0;
   z-index: 100;
   width: 100px;
   height: 100px;
-  font-size: 5rem;
   cursor: pointer;
+  font-size: 5rem;
   color: #f67280;
 }

@@ -9,10 +9,9 @@
   align-items: center;
 }
 
-.TodoItem+.TodoItem {
+.TodoItem + .TodoItem {
   margin-top: 15px;
 }
-
 
 .content {
   cursor: pointer;
@@ -24,14 +23,13 @@
   font-size: 1.5rem;
   color: #f67280;
 }
-
-.contnet .text {
+.content .text {
   margin-left: 0.5rem;
   flex: 1;
 }
 
-.content .checked .text {
-  color:aquamarine;
+.content.checked .text {
+  color: #6c567b;
   cursor: pointer;
   opacity: 0.6;
 }
