@@ -1,102 +1,78 @@
-import React, { useState } from 'react';
-import TodoLayout from './component/TodoLayout';
-import TodoList from './component/TodoList';
-import TodoInsert from './component/TodoInsert';
-import './App.css';
-import { MdAddCircle } from 'react-icons/md';
 
-let nextid = 4;
+import { useState } from "react";
+import "./App.css";
+import Box from "./component/Box";
 
-const App = () => {
+// 1. 박스 2개 (타이틀,사진, 결과)
+//2. 가위 바위 보 버튼이 있다
+//3. 버튼을 클릭하면 클릭한 값이 박스에 보임
+//4.컴퓨터는 랜덤하게 아이템 선택이 된다
+//5. 3 4 의 결과를 가지고 누가 이겼는지 승패를 따진다
+//6. 승패결과에따라 테두리 색이 바뀐다 (이기면-초록, 지면-빨강 비기면-검은색)
 
-  const [selectedTodo,setSelectedTodo] = useState (null)
-  const [insertToggle, setInsertToggle] = useState(false)
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      text: "할일 1",
-      checked: true
-    },
-    {
-      id: 2,
-      text: "할일 2",
-      checked: true
-    },
-    {
-      id: 3,
-      text: "할일 3",
-      checked: true
-    }
-  ]);
-
-  const onInsertTodo = text => {
-    if (text === "") {
-      return alert ("할일을 입력해주세요.")
-    }else {
-      const todo = {
-        id: nextid,
-        text,
-        checked:false
-      };
-      setTodos (todos => todos.concat(todo))
-      nextid++
-    } 
-  };
-
-  const onChangeSelectedTodo = todo => {
-    setSelectedTodo(todo);
-  };
-
-  const onInsertToggle = () => {
-    if (selectedTodo) {
-      setSelectedTodo(null);
-    }
-    setInsertToggle(prev => !prev);
-  };
-
-  const onCheckedToggle = id => {
-    setTodos(todos=> 
-      todos.map(todo => 
-        todo.id === id ? {...todo, checked: !todo.checked} : todo))
-  };
-  
-const onRemove = id => {
-  onInsertToggle();
-  setTodos(todos => todos.filter(todo => todo.id !==id));
+const choice = {
+  rock: {
+    name: "Rock",
+    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOdvXfD0TgJwe39QnYRVeFxPCp21S7E8BX9w&s",
+  },
+  scissors: {
+    name: "Scissors",
+    img: " https://image.utoimage.com/preview/cp868706/2016/12/201612001091_500.jpg",
+  },
+  paper: {
+    name: "Paper",
+    img: "https://cdn.crowdpic.net/detail-thumb/thumb_d_BD030450290C2E8F769E16352FDFF090.jpg ",
+  },
 };
+function App() {
+  const [userSelect, setUserSelect] = useState(null);
+  const [computerSelect, setComputerSelect] = useState(null);
+  const [result, setResult] = useState("");
+  const play = (userChoice) => {
+    setUserSelect(choice[userChoice]);
+    let computerChoice = randomChoice();
+    setComputerSelect(computerChoice);
+    setResult(judgement(choice[userChoice], computerChoice));
+  };
 
-const onUpdata = (id,text) => {
-  onInsertToggle();
-  setTodos(todos => todos.map(todo => todo.id ? {...todo, text} : todo))
-}
+  const randomChoice = () => {
+    let itemArray = Object.keys(choice); //객체에 키값만 뽑아서 어레이로 만들어주는 함수다
+    let randomItem = Math.floor(Math.random() * itemArray.length);
+    let final = itemArray[randomItem];
+    return choice[final];
+  };
+  const judgement = (user, computer) => {
 
+    // user == computer tie
+    // user == rock, computer == "scissors" user 이긴거지
+    // user == "rock" computer == paper   user 진거지
+    // user == scissors computer paper    user 이긴거지
+    // user == scissors computer rock     user 진거지
+    // user == paper computer rock   user 이긴거지
+    // user paper computer scissors user 진거지
+
+    if (user.name == computer.name) {
+      return "tie";
+    } else if (user.name == "Rock")
+      return computer.name == "Scissors" ? "win" : "lose";
+    else if (user.name == "Scissors")
+      return computer.name == "Paper" ? "win" : "lose";
+    else if (user.name == "Paper")
+      return computer.name == "Rock" ? "win" : "lose";
+  };
   return (
-
-    <TodoLayout todolangth={todos.length}>
-      <TodoList 
-      todos={todos} 
-      onInsertTodo={onInsertTodo} 
-      onCheckedToggle={onCheckedToggle} 
-      onChangeSelectedTodo={onChangeSelectedTodo}
-      onInsertToggle={onInsertToggle}
-      />
-      <div className='app-plus-button' onClick={onInsertToggle}>
-        <MdAddCircle />
-        </div>
-      {insertToggle && (
-        <TodoInsert 
-        selectedTodo={selectedTodo}
-        onInsertToggle={onInsertToggle}
-        onInsertTodo={onInsertTodo}
-        onRemove={onRemove}
-        onUpdata={onUpdata}
-        />
-      )}
-    </TodoLayout>
-  )
-};
-
-
-
+    <div>
+      <div className="main">
+        <Box title="You" item={userSelect} result={result} />
+        <Box title="Computer" item={computerSelect} result={result} />
+      </div>
+      <div className="main">
+        <button onClick={() => play("scissors")}>가위</button>
+        <button onClick={() => play("rock")}>바위</button>
+        <button onClick={() => play("paper")}>보</button>
+      </div>
+    </div>
+  );
+}
 
 export default App;
