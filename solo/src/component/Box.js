@@ -11,14 +11,14 @@ const Box = (props) => {
     result = props.result === "win" ? "lose" : "win";
   } else {
     // 위의 경우가 아니라면 props 로 전달된 결과를 그대로 쓴다.
-    result = props.result;
+    result = props.result;  
   }
   if (props.title === "Computer") {
     console.log("computer", result);
   }
 
   return (
-    <div className={`box ${result}`}>
+    <div className={`background ${result}`}>
       <h1>{props.title}</h1>
       <h2 data-testid="item-name">{props.item && props.item.name}</h2>
       <img className="item-img" src={props.item && props.item.img} />
